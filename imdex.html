@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>XCARD - متجر البطاقات الرقمية الليبية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind CSS from jsdelivr -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <!-- Font Awesome from jsdelivr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
+  <!-- Google Fonts: Cairo -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-tr from-blue-100 via-white to-blue-50 min-h-screen flex flex-col">
+  <!-- HEADER -->
+  <header class="bg-white shadow px-3 py-3 flex items-center justify-between rounded-b-2xl no-print">
+    <span class="text-2xl font-bold text-blue-900 flex items-center gap-2">
+      <i class="fa-solid fa-credit-card text-blue-700"></i> XCARD
+    </span>
+    <button id="admin-btn" class="btn-main px-3 py-1 text-xs rounded font-bold flex items-center gap-1 shadow" onclick="showAdminModal()">
+      <i class="fa-solid fa-user-shield"></i>
+      <span id="adminBtnText">تسجيل الدخول</span>
+    </button>
+  </header>
+  
+  <!-- NAV ICONS (HOME BAR) -->
+  <nav class="bg-blue-50 py-2 flex justify-around items-center sticky top-0 z-10 shadow-sm no-print" style="border-bottom:1.5px solid #e4e8f6">
+    <button class="icon-btn bg-blue-100 hover:bg-blue-200 rounded-lg flex flex-col items-center text-xs font-bold transition focus:outline-none px-4 py-2" onclick="navigateTo('main')" title="الرئيسية">
+      <i class="fa-solid fa-house text-blue-700 text-lg"></i>
+    </button>
+    <button class="icon-btn bg-yellow-50 hover:bg-yellow-200 rounded-lg flex flex-col items-center text-xs font-bold transition mx-1 px-4 py-2" onclick="navigateTo('offers')" title="العروض">
+      <i class="fa-solid fa-bolt text-yellow-500 text-lg"></i>
+    </button>
+    <button class="icon-btn bg-green-50 hover:bg-green-100 rounded-lg flex flex-col items-center text-xs font-bold transition px-4 py-2" onclick="navigateTo('products')" title="المنتجات">
+      <i class="fa-solid fa-cubes text-green-500 text-lg"></i>
+    </button>
+    <button class="icon-btn bg-blue-900 hover:bg-blue-800 rounded-lg flex flex-col items-center text-xs font-bold text-white transition relative px-4 py-2" onclick="showCart()" id="cart-btn" title="سلة">
+      <i class="fa-solid fa-shopping-cart text-white text-lg"></i>
+      <span id="cart-count" class="absolute -top-1.5 -right-2 px-2 py-0.5 rounded-full text-xs bg-white text-blue-900 font-bold" style="display:none"></span>
+    </button>
+  </nav>
+  
+  <!-- الرئيسية -->
+  <main class="container mx-auto px-2 py-3 flex-1" id="main-section">
+    <!-- معلومات الترحيب -->
+    <div class="mb-3">
+      <div class="bg-white rounded-xl shadow p-4 text-blue-800 flex flex-col gap-1 border border-blue-100">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-info-circle text-blue-400 text-lg"></i>
+          <span>مرحباً بك في متجر XCARD الرقمي الليبي</span>
+        </div>
+        <p class="text-xs sm:text-sm text-gray-600">
+          جميع بطاقاتك العالمية المفضلة بشكل سريع وآمن.<br>
+          <span class="font-bold text-blue-900">رقم الدعم :</span>
+          <span dir="ltr" class="select-all font-mono">0948181815</span>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Banner -->
+    <section class="mb-3">
+      <div class="rounded-xl overflow-hidden shadow bg-white flex flex-col items-stretch mb-2">
+        <img id="main-banner-img" src="https://www.gamingdragons.com/images/offers-banner.jpg" class="w-full object-cover banner-img rounded-xl" alt="main-banner">
+      </div>
+    </section>
+    
+    <!-- مثبّت: ماستر وفيزا -->
+    <section class="mb-3">
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="showProductModal('mastercard', 'offer')" class="product-tile p-3 flex flex-col items-center justify-center border-0 shadow relative">
+          <img src="https://cdn.jsdelivr.net/gh/jboesch/creditcard-icons@master/svg/mastercard.svg" alt="ماستر كارد" class="product-logo mb-2" />
+          <span class="font-bold text-red-700 text-base">ماستر كارد</span>
+          <span class="text-xs text-green-600 font-bold">خصم %5</span>
+        </button>
+        <button onclick="showProductModal('visa', 'offer')" class="product-tile p-3 flex flex-col items-center justify-center border-0 shadow relative">
+          <img src="https://cdn.jsdelivr.net/gh/jboesch/creditcard-icons@master/svg/visa.svg" alt="فيزا كارد" class="product-logo mb-2" />
+          <span class="font-bold text-blue-700 text-base">فيزا كارد</span>
+          <span class="text-xs text-green-600 font-bold">خصم %4</span>
+        </button>
+      </div>
+    </section>
+    
+    <!-- المنتجات المتوفرة ICON GRID LARGE -->
+    <section class="my-2">
+      <h3 class="font-bold text-blue-900 text-lg mb-2"><i class="fa-solid fa-cubes-stacked"></i> المنتجات المتوفرة</h3>
+      <div id="product-icon-grid" class="grid grid-cols-2 gap-3 product-grid px-2 py-3"></div>
+      <div id="no-products" class="text-center text-gray-400 py-7 hidden">لا توجد بطاقات متاحة حاليا.</div>
+    </section>
+  </main>
+  
+  <!-- العروض -->
+  <main class="container mx-auto px-2 py-4" id="offers-section" style="display:none;">
+    <h3 class="font-bold text-blue-900 text-lg mb-2"><i class="fa-solid fa-bolt"></i> العروض المميزة</h3>
+    <div id="offers-grid" class="grid grid-cols-2 gap-3 product-grid px-2 py-3"></div>
+    <div id="no-offers" class="text-center text-gray-400 py-7 hidden">لا توجد عروض متاحة حاليا.</div>
+  </main>
+  
+  <!-- المنتجات (نسخة موسعة) -->
+  <main class="container mx-auto px-2 py-4" id="products-section" style="display:none;">
+    <h3 class="font-bold text-blue-900 text-lg mb-2"><i class="fa-solid fa-cubes"></i> جميع المنتجات</h3>
+    <div id="products-list" class="grid grid-cols-2 gap-3 product-grid px-2 py-3"></div>
+    <div id="no-products2" class="text-center text-gray-400 py-7 hidden">لا توجد بطاقات متاحة حالياً.</div>
+  </main>
+  
+  <!-- MODALS ROOT -->
+  <div id="modal-root"></div>
+  <div id="toast-area" class="fixed z-50 top-4 left-1/2 transform -translate-x-1/2 text-center"></div>
+  
+  <script src="script.js"></script>
+  
+  <!-- FOOTER -->
+  <footer class="bg-blue-900 text-gray-100 text-center py-4 mt-10 shadow-inner no-print text-xs">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <span><i class="fa-solid fa-phone"></i> الدعم الفني: <span class="select-all font-mono">0948181815</span></span>
+      <span class="hidden sm:inline">|</span>
+      <span>XCARD. جميع الحقوق محفوظة &copy; 2024</span>
+      <span class="hidden sm:inline">|</span>
+      <span>
+        تابعنا:
+        <a href="#" class="mx-1"><i class="fa-brands fa-telegram"></i></a>
+        <a href="#" class="mx-1"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" class="mx-1"><i class="fa-brands fa-twitter"></i></a>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>
